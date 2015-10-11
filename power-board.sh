@@ -5,10 +5,10 @@ declare -A offCommands
 declare -A rebootCommands
 
 # AM335x GP
-relay[335x-gp]=5
-onCommands[335x-gp]="relay_on"
-offCommands[335x-gp]="relay_off"
-rebootCommands[335x-gp]="${offCommands[335x-gp]} ${onCommands[335x-gp]}"
+relay[335-gp]=5
+onCommands[335-gp]="relay_on"
+offCommands[335-gp]="relay_off"
+rebootCommands[335-gp]="${offCommands[335x-gp]} ${onCommands[335x-gp]}"
 
 # DRA7 GP
 relay[dra7-gp]=7
