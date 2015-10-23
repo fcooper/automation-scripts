@@ -24,6 +24,7 @@ case $board in
 		minicom -wD /dev/k2e
 		;;
 	k2g)
+		minicom -wD /dev/k2g
 		;;
 	x15)
 		;;

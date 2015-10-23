@@ -12,14 +12,29 @@ fs[dra7-gp]=dra7x
 pwr[dra7-gp]=dra7-gp
 pvr[dra7-gp]=dra7
 
-dtb[am437-sk]=am437x-sk-evm.dtb
-fs[am437-sk]=am437x
-pwr[am437-sk]=437x-sk
-pvr[am437-sk]=am437x
+dtb[437-sk]=am437x-sk-evm.dtb
+fs[437-sk]=am437x
+pwr[437-sk]=437x-sk
+pvr[437-sk]=am437x
+
+dtb[437-gp]=am437x-gp-evm.dtb
+fs[437-gp]=am437x
+pwr[437-gp]=437x-gp
+pvr[437-gp]=am437x
+
+dtb[335-gp]=am335x-evm.dtb
+fs[335-gp]=am335x
+pwr[335-gp]=335-gp
+
 
 dtb[k2e]=k2e-evm.dtb
 fs[k2e]=k2e
 pwr[k2e]=k2e
+
+dtb[k2g]=k2g-evm.dtb
+fs[k2g]=k2g
+pwr[k2g]=k2g
+
 
 supported_machines=()
 function supported_machines() {

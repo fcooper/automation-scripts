@@ -8,7 +8,7 @@ declare -A rebootCommands
 relay[335-gp]=5
 onCommands[335-gp]="relay_on"
 offCommands[335-gp]="relay_off"
-rebootCommands[335-gp]="${offCommands[335x-gp]} ${onCommands[335x-gp]}"
+rebootCommands[335-gp]="${offCommands[335-gp]} ${onCommands[335-gp]}"
 
 # DRA7 GP
 relay[dra7-gp]=7
@@ -41,6 +41,12 @@ relay[k2e]=3
 onCommands[k2e]="relay_on"
 offCommands[k2e]="relay_off"
 rebootCommands[k2e]="${offCommands[k2e]} ${onCommands[k2e]}"
+
+# K2G
+relay[k2g]=2
+onCommands[k2g]="relay_on"
+offCommands[k2g]="relay_off"
+rebootCommands[k2g]="${offCommands[k2g]} ${onCommands[k2g]}"
 
 turn_off_sw () {
    relay_num=$1
