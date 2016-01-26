@@ -7,6 +7,10 @@ declare -A fs
 declare -A pwr
 declare -A pvr
 
+dtb[bbb]='am335x-boneblack.dtb am335x-bone.dtb'
+fs[bbb]=bbb
+pwr[bbb]=bbb
+
 dtb[dra7-gp]=dra7-evm-lcd-osd.dtb
 fs[dra7-gp]=dra7x
 pwr[dra7-gp]=dra7-gp
@@ -34,6 +38,15 @@ pwr[k2e]=k2e
 dtb[k2g]=k2g-evm.dtb
 fs[k2g]=k2g
 pwr[k2g]=k2g
+
+
+dtb[k2hk]=k2hk-evm.dtb
+fs[k2hk]=k2hk
+pwr[k2hk]=k2e
+
+dtb[x15]=am57xx-beagle-x15.dtb
+fs[x15]=x15
+pwr[x15]=x15
 
 
 supported_machines=()
@@ -322,10 +335,10 @@ if [ "$action" = "i" -o "$action" = "bi" ]; then
 		        echo "Failed to Install Modules"
 	        fi
 
-	        echo "Deleting CPU Freq"
-	        echo ""
+	        #echo "Deleting CPU Freq"
+	        #echo ""
 	        # Don't want to risk deleting stuff on my fs
-	        sudo rm $nfs_path/$selected_fs/lib/modules/*/kernel/drivers/cpufreq/*
+	        #sudo rm $nfs_path/$selected_fs/lib/modules/*/kernel/drivers/cpufreq/*
         fi
 
         if [ "$element" = "d" ]; then

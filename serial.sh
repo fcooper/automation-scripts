@@ -5,6 +5,7 @@ case $board in
 	bbw)
 		;;
 	bbb)
+		minicom -wD /dev/bbb
 		;;
 	335-gp)
 		minicom -wD /dev/335-gp
@@ -27,11 +28,15 @@ case $board in
 		minicom -wD /dev/k2g
 		;;
 	x15)
+		minicom -wD /dev/x15
 		;;
 	dra7)
 		minicom -wD /dev/dra7	
 		;;
 	dra72-gp)
+		;;
+	pandaboard)
+		minicom -wD /dev/pandaboard
 		;;
 	*)
 		echo "Invalid board"

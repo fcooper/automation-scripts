@@ -4,31 +4,56 @@ declare -A onCommands
 declare -A offCommands
 declare -A rebootCommands
 
+# K2HK 
+relay[k2hk]=6
+onCommands[k2hk]="pw_relay_on"
+offCommands[k2hk]="pw_relay_off"
+rebootCommands[k2hk]="${offCommands[k2hk]} ${onCommands[k2hk]}"
+
+# X15 
+relay[x15]=2
+sw[x15]=15
+onCommands[x15]="pw_relay_on sw_on"
+offCommands[x15]="pw_relay_off sw_off"
+rebootCommands[x15]="${offCommands[x15]} ${onCommands[x15]}"
+
+# BBB
+relay[bbb]=1
+onCommands[bbb]="pw_relay_on"
+offCommands[bbb]="pw_relay_off"
+rebootCommands[bbb]="${offCommands[bbb]} ${onCommands[bbb]}"
+
 # AM335x GP
-relay[335-gp]=5
+relay[335-gp]=7
 onCommands[335-gp]="relay_on"
 offCommands[335-gp]="relay_off"
 rebootCommands[335-gp]="${offCommands[335-gp]} ${onCommands[335-gp]}"
 
 # DRA7 GP
-relay[dra7-gp]=7
-sw[dra7-gp]=2
-onCommands[dra7-gp]="relay_on sw_off sw_on sw_off"
+relay[dra7-gp]=5
+onCommands[dra7-gp]="relay_on"
 offCommands[dra7-gp]="relay_off"
 rebootCommands[dra7-gp]="${offCommands[dra7-gp]} ${onCommands[dra7-gp]}"
 
+# pandaboard
+relay[pandaboard]=1
+onCommands[pandaboard]="relay_on"
+offCommands[pandaboard]="relay_off"
+rebootCommands[pandaboard]="${offCommands[pandaboard]} ${onCommands[pandaboard]}"
+
 # AM37 GP
-relay[37x-gp]=4
+relay[37x-gp]=3
 onCommands[37x-gp]="relay_on"
 offCommands[37x-gp]="relay_off"
 rebootCommands[37x-gp]="${offCommands[37x-gp]} ${onCommands[37x-gp]}"
 
+# Relay 4 - Josh BB
 # AM437 SK
-relay[437-sk]=6
-sw[437-sk]=1
-onCommands[437-sk]="relay_on sw_off sw_on sw_off"
-offCommands[437-sk]="relay_off"
-rebootCommands[437-sk]="${offCommands[437-sk]} ${onCommands[437-sk]}"
+#relay[437-sk]=4
+#sw[437-sk]=1
+#onCommands[437-sk]="relay_on sw_off sw_on sw_off"
+#offCommands[437-sk]="relay_off"
+#rebootCommands[437-sk]="${offCommands[437-sk]} ${onCommands[437-sk]}"
 
 # AM437 GP
 relay[437-gp]=8
@@ -37,7 +62,7 @@ offCommands[437-gp]="relay_off"
 rebootCommands[437-gp]="${offCommands[437-gp]} ${onCommands[437-gp]}"
 
 # K2E
-relay[k2e]=3
+relay[k2e]=6
 onCommands[k2e]="relay_on"
 offCommands[k2e]="relay_off"
 rebootCommands[k2e]="${offCommands[k2e]} ${onCommands[k2e]}"
@@ -47,6 +72,12 @@ relay[k2g]=2
 onCommands[k2g]="relay_on"
 offCommands[k2g]="relay_off"
 rebootCommands[k2g]="${offCommands[k2g]} ${onCommands[k2g]}"
+
+# AM57 IDK
+relay[am57-idk]=2
+onCommands[am57-idk]="relay_on"
+offCommands[am57-idk]="relay_off"
+rebootCommands[am57-idk]="${offCommands[am57-idk]} ${onCommands[am57-idk]}"
 
 turn_off_sw () {
    relay_num=$1
@@ -78,6 +109,20 @@ turn_on_relay () {
 	sshpass -pubnt ssh -o StrictHostKeyChecking=no ubnt@192.168.1.243 "echo 1 > /proc/power/relay$relay_num"
 }
 
+turn_off_pw_relay () {
+    relay_num=$1
+	echo "test off"
+    echo "Turning Off Relay Power Switch $relay_num"
+    curl --silent http://admin:1234@192.168.1.100/outlet?$relay_num=OFF > /dev/null
+}
+
+turn_on_pw_relay () {
+    relay_num=$1
+	echo "test on"
+    echo "Turning On Relay Power Switch $relay_num"
+    curl --silent http://admin:1234@192.168.1.100/outlet?$relay_num=ON > /dev/null
+}
+
 process_command () {
     machine=$1
     commands=$2
@@ -104,6 +149,12 @@ process_command () {
 			    ;;
 		    relay_off)
 			    turn_off_relay $relay_num
+			    ;;
+		    pw_relay_on)
+			    turn_on_pw_relay $relay_num
+			    ;;
+		    pw_relay_off)
+			    turn_off_pw_relay $relay_num
 			    ;;
 		    *)
 			    echo "Invalid build argument: $element"
@@ -170,6 +221,7 @@ if [ "$board" = "all" ]; then
             echo "Turning $i reboot"
             process_command $i "${rebootCommands[$i]}"
         fi
+	delay 1
     done
 else
     if [ "$command" = "on" ]; then

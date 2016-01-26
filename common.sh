@@ -1,6 +1,6 @@
 num_jobs=8
 
-valid_machines=(bbw bbb 335-gp 335-sk 437-gp 437-sk 37x-gp k2e k2g x15 dra7-gp dra72-gp)
+valid_machines=(bbw bbb 335-gp 335-sk 437-gp 437-sk 37x-gp k2e k2g x15 dra7-gp dra72-gp k2hk x15)
 
 function ccachemake () {
 

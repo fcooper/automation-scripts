@@ -9,7 +9,7 @@ fi
 if [ ! -d $1 ]; then
 	echo "Specified directory does not exist!"
 	exit
-fi 
+fi
 
 if [ ! -d /mnt/ramdisk ]; then
 	mkdir /mnt/ramdisk
@@ -18,7 +18,7 @@ fi
 sudo rm /home/franklin/nfs/k2g/ramdisk.gz
 #gets the size of the directory you picked and adds a 5MB extra space
 
-RD_SIZE=$(du $1 --max-depth=0 | awk '{ print ($1 + 8096) }')
+RD_SIZE=$(du $1 --max-depth=0 | awk '{ print ($1 + 10240) }')
 
 RD_SIZE_H=$(du $1 -h --max-depth=0 | awk '{ print ($1 + 8) }')
 
