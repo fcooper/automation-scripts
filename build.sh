@@ -2,6 +2,8 @@
 
 source /usr/local/bin/common.sh
 
+is_Kernel_dir
+
 declare -A dtb     # Create an associative array
 declare -A fs
 declare -A pwr
