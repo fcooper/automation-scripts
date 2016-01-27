@@ -21,4 +21,22 @@ function board_list () {
 }
 
 nfs_path="/home/franklin/nfs/"
-kernel_path="/home/franklin/repositories/git/linux"
+kernel_path=`git rev-parse --show-toplevel`
+toolchain_dir=/home/franklin/toolchain/gcc-linaro-arm-linux-gnueabihf-4.9-2015.05_linux/bin/
+
+kernel_files=(MAINTAINERS REPORTING-BUGS Kconfig scripts/checkpatch.pl)
+function  is_Kernel_dir () {
+	a=1
+	for element in "${kernel_files[@]}"
+	do
+		if [ -f "$kernel_path/$element" ]
+		then
+			a=2
+		else
+			echo "Directory $kernel_path is not a valid kernel directory"
+			exit 1
+		fi
+	done 
+	
+	echo "You are currently based in kernel directory: $kernel_path"
+}
