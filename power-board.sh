@@ -113,14 +113,14 @@ turn_off_pw_relay () {
     relay_num=$1
 	echo "test off"
     echo "Turning Off Relay Power Switch $relay_num"
-    curl --silent http://admin:1234@192.168.1.100/outlet?$relay_num=OFF > /dev/null
+    curl --silent http://admin:1234@192.168.1.252/outlet?$relay_num=OFF > /dev/null
 }
 
 turn_on_pw_relay () {
     relay_num=$1
 	echo "test on"
     echo "Turning On Relay Power Switch $relay_num"
-    curl --silent http://admin:1234@192.168.1.100/outlet?$relay_num=ON > /dev/null
+    curl --silent http://admin:1234@192.168.1.252/outlet?$relay_num=ON > /dev/null
 }
 
 process_command () {
@@ -221,7 +221,7 @@ if [ "$board" = "all" ]; then
             echo "Turning $i reboot"
             process_command $i "${rebootCommands[$i]}"
         fi
-	delay 1
+	sleep 1
     done
 else
     if [ "$command" = "on" ]; then
