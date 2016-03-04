@@ -1,56 +1,31 @@
 #! /bin/bash
 # full_appended_keystone_defconfig no_baseport_appended_keystone_defconfig no_connectivity_appended_keystone_defconfig no_ipc_appended_keystone_defconfig keystone_defconfig
 
-commits=(ti2015.01 ti2015.02 ti-lsk-linux-4.1.y)
-defconfigs=(fullfragment no_baseport_appended_keystone_defconfig no_connectivity_appended_keystone_defconfig no_ipc_appended_keystone_defconfig keystone_defconfig)
-file='/home/franklin/k2hk-log/capture.txt'
-problem="Using K2HK_EMAC device"
-kernel_path="/home/franklin/repositories/git/linux-k2hk"
+file='/home/franklin/am437-test/capture.txt'
+problem="File:FATAL: TEST FAILED"
 seconds=0
-minutes=0
-hours=1
+minutes=2
+hours=0
 mytime=$(expr $seconds + $minutes \* 60 + $hours \* 60 \* 60)
 
-read -s -p "Password: " PASS
 
-cd $kernel_path
+COUNTER=0
 
-for commit in "${commits[@]}"
+while [ $COUNTER -lt 100000000000 ]
 do
-	for element in "${defconfigs[@]}"
-	do
 
-		date
-		ARCH=arm CROSS_COMPILE='ccache /home/franklin/toolchain/gcc-linaro-arm-linux-gnueabihf-4.7-2013.03-20130313_linux/bin/arm-linux-gnueabihf-' make -sj 9 distclean
-		if [ "$element" = "fullfragment" ]
-		then
-			rm arch/arm/configs/appended_keystone_defconfig
-			
-			echo "Creating full fragment based defconfig"
-			simple_defconfig.sh
-			element="appended_keystone_defconfig"
-		fi
-
-		echo "Now using this defconfig $element with commit $commit"
-
-		ARCH=arm CROSS_COMPILE='ccache /home/franklin/toolchain/gcc-linaro-arm-linux-gnueabihf-4.7-2013.03-20130313_linux/bin/arm-linux-gnueabihf-' make -sj 9 $element 
-
-		echo "Building Kernel modules and device tree"
-		build.sh -m k2hk -b kmd -a b
-
-		echo "Installing kernel modules and device tree and rebooting board"
-		echo $PASS | build.sh -m k2hk -b kmd -a i  -p reboot
+		power-board.sh 437-gp reboot
 
 		cat /dev/null > $file
 
 		good="no"
 		end=$((SECONDS+$mytime))
 
+		echo "Counter: $COUNTER"
 		echo "Started now $end"
-		data
 		while [ $SECONDS -lt $end ]; do
 		    # Do what you want.
-		    cat $file | grep "end trace"
+		    cat $file | grep "File:FATAL: TEST FAILED"
 
 		    if [ "$?" = "0" ]
 		    then
@@ -62,15 +37,12 @@ do
 		    :
 		done
 
-		echo "Sleeping for a bit"
-		sleep 5
-		cat $file > /home/franklin/k2hk-log/$commit-$element-log.txt
 
+		cat $file > "/home/franklin/am437-test/${COUNTER}.txt"
 		if [ "$good" = "yes" ]
 		then
-			echo "Saw failure with config $element for commit $commit"
-		else
-			echo "Saw nothing with config $element for commit $commit"
+			echo "Saw error after $COUNTER iterations"
+			break
 		fi
-	done
+		let COUNTER++
 done

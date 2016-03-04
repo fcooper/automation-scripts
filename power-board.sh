@@ -100,13 +100,13 @@ turn_off_relay () {
 
     echo "Turning Off Relay $relay_num"
     the="/proc/power/relay$relay_num"
-	sshpass -pubnt ssh -o StrictHostKeyChecking=no ubnt@192.168.1.243 "echo 0 > /proc/power/relay$relay_num"
+	sshpass -pubnt ssh -o StrictHostKeyChecking=no ubnt@192.168.1.3 "echo 0 > /proc/power/relay$relay_num"
 }
 
 turn_on_relay () {
     relay_num=$1
     echo "Turning On Relay $relay_num"
-	sshpass -pubnt ssh -o StrictHostKeyChecking=no ubnt@192.168.1.243 "echo 1 > /proc/power/relay$relay_num"
+	sshpass -pubnt ssh -o StrictHostKeyChecking=no ubnt@192.168.1.3 "echo 1 > /proc/power/relay$relay_num"
 }
 
 turn_off_pw_relay () {

@@ -13,7 +13,8 @@ dtb[bbb]='am335x-boneblack.dtb am335x-bone.dtb'
 fs[bbb]=bbb
 pwr[bbb]=bbb
 
-dtb[dra7-gp]=dra7-evm-lcd-osd.dtb
+#dtb[dra7-gp]=dra7-evm-lcd-osd.dtb
+dtb[dra7-gp]=dra7-evm.dtb
 fs[dra7-gp]=dra7x
 pwr[dra7-gp]=dra7-gp
 pvr[dra7-gp]=dra7
@@ -49,6 +50,9 @@ pwr[k2hk]=k2e
 dtb[x15]=am57xx-beagle-x15.dtb
 fs[x15]=x15
 pwr[x15]=x15
+
+dtb[572-gp]=am57xx-evm.dtb
+fs[572-gp]=am57x
 
 
 supported_machines=()
