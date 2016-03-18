@@ -89,9 +89,9 @@ machine=""
 build=""
 action=""
 power=""
+remote=""
 
-
-while getopts ":b:m:a:f:p:" opt; do
+while getopts ":b:m:a:f:p:r" opt; do
 	case $opt in
 	f)
 			file=$OPTARG
@@ -107,6 +107,9 @@ while getopts ":b:m:a:f:p:" opt; do
 			;;
 	p)
 			power=$OPTARG
+			;;
+	r)
+			remote="yes"
 			;;
     	\?)
 			echo "Invalid option: -$OPTARG" >&2
@@ -253,6 +256,9 @@ selected_fs="${fs[$machine]}"
 selected_pwr="${pwr[$machine]}"
 selected_pvr="${pvr[$machine]}"
 
+if [ "$remote" = "yes" ]; then
+	selected_fs="remote"
+fi
 if [ ":$selected_dtb:" = "::" -o ":$selected_fs:" = "::" ]; then
     	echo "Script configuration error"
 	echo "Error: No valid dtb or filesystem selected for $machine"
@@ -372,6 +378,13 @@ if [ "$action" = "i" -o "$action" = "bi" ]; then
 
         fi
     done
+
+	if [ "$remote" = "yes" ]; then
+		echo "Tar up remote fs"
+		cd $nfs_path/$selected_fs/
+		sudo tar -czf ../remote-fs.tar.gz *
+		cd -
+	fi
 fi
 
 if [ "$power" != "" ]; then
