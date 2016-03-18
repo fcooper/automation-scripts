@@ -11,7 +11,7 @@ offCommands[k2hk]="pw_relay_off"
 rebootCommands[k2hk]="${offCommands[k2hk]} ${onCommands[k2hk]}"
 
 # X15 
-relay[x15]=2
+relay[x15]=5
 sw[x15]=15
 onCommands[x15]="pw_relay_on sw_on"
 offCommands[x15]="pw_relay_off sw_off"
