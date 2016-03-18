@@ -4,6 +4,8 @@ declare -A onCommands
 declare -A offCommands
 declare -A rebootCommands
 
+source /usr/local/bin/common.sh
+
 # K2HK 
 relay[k2hk]=6
 onCommands[k2hk]="pw_relay_on"
@@ -84,7 +86,7 @@ turn_off_sw () {
    let value="($relay_num - 1) * 2"
    value=$(printf %02d $value)
    echo "Turning off SW $relay_num"
-   curl -s 192.168.1.251/30000/$value &> /dev/null
+   curl -s $switch_one_ip/30000/$value &> /dev/null
 }
 
 turn_on_sw () {
@@ -92,7 +94,7 @@ turn_on_sw () {
     let value="($relay_num - 1) * 2 + 1"
     value=$(printf %02d $value)
     echo "Turning on SW $relay_num"
-    curl -s 192.168.1.251/30000/$value &> /dev/null
+    curl -s $switch_one_ip/30000/$value &> /dev/null
 }
 
 turn_off_relay () {
@@ -100,27 +102,27 @@ turn_off_relay () {
 
     echo "Turning Off Relay $relay_num"
     the="/proc/power/relay$relay_num"
-	sshpass -pubnt ssh -o StrictHostKeyChecking=no ubnt@192.168.1.3 "echo 0 > /proc/power/relay$relay_num"
+	sshpass -pubnt ssh -o StrictHostKeyChecking=no ubnt@$relay_one_ip "echo 0 > /proc/power/relay$relay_num"
 }
 
 turn_on_relay () {
     relay_num=$1
     echo "Turning On Relay $relay_num"
-	sshpass -pubnt ssh -o StrictHostKeyChecking=no ubnt@192.168.1.3 "echo 1 > /proc/power/relay$relay_num"
+	sshpass -pubnt ssh -o StrictHostKeyChecking=no ubnt@$relay_one_ip "echo 1 > /proc/power/relay$relay_num"
 }
 
 turn_off_pw_relay () {
     relay_num=$1
 	echo "test off"
     echo "Turning Off Relay Power Switch $relay_num"
-    curl --silent http://admin:1234@192.168.1.252/outlet?$relay_num=OFF > /dev/null
+    curl --silent http://admin:1234@$pw_relay_ip/outlet?$relay_num=OFF > /dev/null
 }
 
 turn_on_pw_relay () {
     relay_num=$1
 	echo "test on"
     echo "Turning On Relay Power Switch $relay_num"
-    curl --silent http://admin:1234@192.168.1.252/outlet?$relay_num=ON > /dev/null
+    curl --silent http://admin:1234@$pw_relay_ip/outlet?$relay_num=ON > /dev/null
 }
 
 process_command () {
