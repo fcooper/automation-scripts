@@ -1,0 +1,112 @@
+#!/usr/bin/env python
+import os
+import re
+import datetime
+
+import sys
+
+pw_client = "/home/franklin/repositories/git/patchwork/patchwork/bin/pwclient"
+entered_id = sys.argv[2]
+project_name = sys.argv[1]
+def header(patch_name):
+	test = re.match(r"^(\[.+\])\ ",patch_name)
+
+	if test and "/" in test.group(0):
+		bracket =  test.group(0)
+
+
+		splitter = bracket.rsplit(",",1)
+
+		prefix = "["
+		suffix = splitter[0]
+		if(len(splitter) == 2):
+			prefix = splitter[0]+","
+			suffix = splitter[1]
+
+		suffix = "/"+suffix.rsplit("/",1)[1]
+
+		return [prefix,suffix]
+
+	else:
+		return [None,None]
+
+
+
+tmp = os.popen(pw_client+' info -p '+project_name+' '+entered_id).read()
+
+test = tmp.split("\n")
+
+name = None
+email = None
+date = None
+id2 = None
+for info in test:
+
+	if "- name          : " in info:
+		name = re.search(r"- name          :(.*)",info).group(1).strip()
+
+	elif "- submitter     : " in info:
+
+		if re.search(r"<(.*)>$",info) == None:
+			email = info.replace("- submitter     : ","")
+		else:
+			email = re.search(r"<(.*)>$",info).group(1)
+	elif "- date          : " in info:
+		date = info.replace("- date          : ","")
+	elif "- id            : " in info:
+		id2 = info.replace("- id            : ","")
+
+print
+print "Found patch"
+print
+
+print "Patch Name: "+name
+print "Date submitted: "+date
+print "Submitter email: "+email
+
+timestamp = datetime.datetime.strptime(date,'%Y-%m-%d %H:%M:%S')
+prefix2, suffix2 = header(name)
+
+tmp = os.popen(pw_client+' list -p '+project_name+'  -f "%{id}#DEAD#%{submitter_id}#DEAD#%{date}#DEAD#%{name}#DEAD#%{msgid}#DEAD#%{id}" -w "'+email+'"').read()
+
+test = tmp.split("\n")
+
+id_list = []
+
+print ""
+if prefix2 == None:
+	print "This is a standalone patch"
+	id_list.append(id2)
+else:
+	print "This patch is apart of a patchset. Finding the others"
+	for patch in test:
+
+		if "#DEAD" not in patch:
+			continue
+
+		fields = patch.split("#DEAD#")
+
+		patch_name =  fields[3].strip()
+		patch_date = fields[2].strip()
+		patch_id = fields[5].strip()
+		prefix, suffix = header(patch_name)
+
+		if prefix != None:
+
+			if prefix == prefix2 and suffix2 == suffix:
+				patch_timestamp = datetime.datetime.strptime(patch_date,'%Y-%m-%d %H:%M:%S')
+
+				if abs((timestamp-patch_timestamp).total_seconds()) < 120:
+					#print patch_name
+					#print abs((timestamp-patch_timestamp).total_seconds())
+					id_list.append(patch_id)
+
+		else:
+			continue
+
+	print ""
+	print "Found "+str(len(id_list))+" patches in this patchset. Downloading them now"
+
+tmp = os.popen(pw_client+' get -p '+project_name+'  '+" ".join(id_list)).read()
+print ""
+print tmp
