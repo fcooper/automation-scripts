@@ -8,6 +8,13 @@ import sys
 pw_client = "/home/franklin/repositories/git/patchwork/patchwork/bin/pwclient"
 entered_id = sys.argv[2]
 project_name = sys.argv[1]
+
+
+tmp = os.popen(pw_client+' list -p '+project_name +' -N 1 -f "FRANKLIN_VALID"' ).read()
+if "FRANKLIN_VALID" not in tmp:
+	print "Invalid project"
+	exit()
+
 def header(patch_name):
 	test = re.match(r"^(\[.+\])\ ",patch_name)
 
@@ -32,7 +39,11 @@ def header(patch_name):
 
 
 
-tmp = os.popen(pw_client+' info -p '+project_name+' '+entered_id).read()
+tmp = os.popen(pw_client+' info -p '+project_name+' '+entered_id+' 2> /dev/null || echo "FRANKLIN_INVALID"').read()
+
+if "FRANKLIN_INVALID" in tmp:
+	print "Invalid ID"
+	exit()
 
 test = tmp.split("\n")
 
