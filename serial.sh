@@ -7,6 +7,12 @@ case $board in
 	bbb)
 		minicom -wD /dev/bbb
 		;;
+	572-idk)
+		minicom -wD /dev/572-idk
+		;;
+	335-ice)
+		minicom -wD /dev/335-ice
+		;;
 	335-gp)
 		minicom -wD /dev/335-gp
 		;;

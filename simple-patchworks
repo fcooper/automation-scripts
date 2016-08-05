@@ -10,11 +10,6 @@ entered_id = sys.argv[2]
 project_name = sys.argv[1]
 
 
-tmp = os.popen(pw_client+' list -p '+project_name +' -N 1 -f "FRANKLIN_VALID"' ).read()
-if "FRANKLIN_VALID" not in tmp:
-	print "Invalid project"
-	exit()
-
 def header(patch_name):
 	test = re.match(r"^(\[.+\])\ ",patch_name)
 
@@ -38,6 +33,11 @@ def header(patch_name):
 		return [None,None]
 
 
+
+tmp = os.popen(pw_client+' list -p '+project_name +' -N 1 -f "FRANKLIN_VALID"' ).read()
+if "FRANKLIN_VALID" not in tmp:
+	print "Invalid project"
+	exit()
 
 tmp = os.popen(pw_client+' info -p '+project_name+' '+entered_id+' 2> /dev/null || echo "FRANKLIN_INVALID"').read()
 

@@ -1,3 +1,4 @@
+#!/bin/bash -x
 source /usr/local/bin/common.sh
 
 
