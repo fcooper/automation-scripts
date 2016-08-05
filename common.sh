@@ -1,10 +1,15 @@
 source /usr/local/bin/config
 
-kernel_path=`git rev-parse --show-toplevel`
-
 kernel_files=(MAINTAINERS REPORTING-BUGS Kconfig scripts/checkpatch.pl)
 function  is_Kernel_dir () {
 	a=1
+
+	kernel_path=`git rev-parse --show-toplevel`
+
+	if [ ! -d "$kernel_path/.git" ]; then
+	  echo "Directory is not a git repository"
+	fi
+
 	for element in "${kernel_files[@]}"
 	do
 		if [ -f "$kernel_path/$element" ]
