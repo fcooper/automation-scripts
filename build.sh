@@ -138,6 +138,8 @@ if [ "$build" = "" -o "$action" = "" ]; then
 	fi
 fi
 
+load_addr=
+append_dtb=false
 machine_match=false
 
 for element in "${valid_machines[@]}"
@@ -162,6 +164,11 @@ if [ "$machine_match" = "false" -o "$machine" = "" ]; then
 
     exit 1
 
+fi
+
+if [ "$machine" == "37x-gp" ]; then
+	append_dtb=true
+	load_addr=0x80008000
 fi
 
 if [ "$file" != "" ]; then
@@ -269,7 +276,7 @@ fi
 if [ "$action" = "b" -o "$action" = "bi" ]; then
     for element in "${build[@]}"
     do
-        if [ "$element" = "k" ]; then
+        if [ "$element" = "k" -a "$append_dtb" = false ]; then
 	        echo "Building Kernel"
 	        ccachemake zImage
 
@@ -280,6 +287,19 @@ if [ "$action" = "b" -o "$action" = "bi" ]; then
 
 	        echo ""
         fi
+	
+	if [ "$element" = "k" -a "$append_dtb" = true ] || [ "$element" = "d" -a "$append_dtb" = true ]
+	then
+		echo "Building appended uImage"
+		ccachemake LOADADDR=$load_addr uImage
+		ccachemake $selected_dtb	
+		if [ "$?" != "0" ]; then
+			echo "Error building appended kernel"
+			exit 1
+		fi
+			echo ""
+	fi
+		
 
         if [ "$element" = "m" ]; then
 	        echo "Building Modules"
@@ -340,6 +360,9 @@ if [ "$action" = "i" -o "$action" = "bi" ]; then
         fi
 
         if [ "$element" = "m" ]; then
+
+		echo "Deleting Old Modules"
+		sudo rm -r $nfs_path/$selected_fs/lib/modules/*
 	        echo "Installing Modules"
 	        sudo ARCH=arm INSTALL_MOD_PATH=$nfs_path/$selected_fs make modules_install > /dev/null
 
@@ -352,6 +375,16 @@ if [ "$action" = "i" -o "$action" = "bi" ]; then
 	        # Don't want to risk deleting stuff on my fs
 	        #sudo rm $nfs_path/$selected_fs/lib/modules/*/kernel/drivers/cpufreq/*
         fi
+
+	if [ "$element" = "k" -a "$append_dtb" = true ] || [ "$element" = "d" -a "$append_dtb" = true ]
+	then
+		echo "Installing Appended uImage"
+
+		cat arch/arm/boot/zImage arch/arm/boot/dts/$selected_dtb > arch/arm/boot/zImage.dtb
+		cp arch/arm/boot/zImage.dtb arch/arm/boot/zImage
+		$(cut -f 3- -d ' ' < arch/arm/boot/.uImage.cmd)
+		sudo cp arch/arm/boot/uImage $nfs_path/$selected_fs/boot/uImage-dtb.$selected_dtb
+	fi
 
         if [ "$element" = "d" ]; then
 	        echo "Installing DTB: $selected_dtb"
