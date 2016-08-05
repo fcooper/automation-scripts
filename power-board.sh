@@ -6,18 +6,31 @@ declare -A rebootCommands
 
 source /usr/local/bin/common.sh
 
+# 335-ice 
+relay[335-ice]=7
+onCommands[335-ice]="pw_relay_on"
+offCommands[335-ice]="pw_relay_off"
+rebootCommands[335-ice]="${offCommands[335-ice]} ${onCommands[335-ice]}"
+
 # K2HK 
 relay[k2hk]=6
 onCommands[k2hk]="pw_relay_on"
 offCommands[k2hk]="pw_relay_off"
 rebootCommands[k2hk]="${offCommands[k2hk]} ${onCommands[k2hk]}"
 
+# AM57 IDK
+sw[am57-idk]=2
+relay[am57-idk]=6
+onCommands[am57-idk]="pw_relay_on sw_off sw_on sw_off"
+offCommands[am57-idk]="pw_relay_off sw_off"
+rebootCommands[am57-idk]="${offCommands[am57-idk]} pause ${onCommands[am57-idk]}"
+
 # X15 
 relay[x15]=5
 sw[x15]=15
-onCommands[x15]="pw_relay_on sw_on"
+onCommands[x15]="pw_relay_on sw_off sw_on sw_off"
 offCommands[x15]="pw_relay_off sw_off"
-rebootCommands[x15]="${offCommands[x15]} ${onCommands[x15]}"
+rebootCommands[x15]="${offCommands[x15]} pause ${onCommands[x15]}"
 
 # BBB
 relay[bbb]=1
@@ -75,11 +88,6 @@ onCommands[k2g]="relay_on"
 offCommands[k2g]="relay_off"
 rebootCommands[k2g]="${offCommands[k2g]} ${onCommands[k2g]}"
 
-# AM57 IDK
-relay[am57-idk]=2
-onCommands[am57-idk]="relay_on"
-offCommands[am57-idk]="relay_off"
-rebootCommands[am57-idk]="${offCommands[am57-idk]} ${onCommands[am57-idk]}"
 
 turn_off_sw () {
    relay_num=$1
@@ -113,14 +121,12 @@ turn_on_relay () {
 
 turn_off_pw_relay () {
     relay_num=$1
-	echo "test off"
     echo "Turning Off Relay Power Switch $relay_num"
     curl --silent http://admin:1234@$pw_relay_ip/outlet?$relay_num=OFF > /dev/null
 }
 
 turn_on_pw_relay () {
     relay_num=$1
-	echo "test on"
     echo "Turning On Relay Power Switch $relay_num"
     curl --silent http://admin:1234@$pw_relay_ip/outlet?$relay_num=ON > /dev/null
 }
@@ -157,6 +163,10 @@ process_command () {
 			    ;;
 		    pw_relay_off)
 			    turn_off_pw_relay $relay_num
+			    ;;
+		    pause)
+			    echo "Sleep for a second"
+			    sleep 3
 			    ;;
 		    *)
 			    echo "Invalid build argument: $element"
