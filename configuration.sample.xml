@@ -1,0 +1,49 @@
+<configurations>
+	<nfsdir>/home/a0273011local/nfs/</nfsdir>
+	<toolchaindir>/home/a0273011local/toolchain/gcc-linaro-4.9-2015.05-x86_64_arm-linux-gnueabihf/bin/</toolchaindir>
+	<toolchainprefix>arm-linux-gnueabihf-</toolchainprefix>
+	<makejobs>8</makejobs>
+
+	<arguments>
+		<kernel>k</kernel>
+		<dtb>d</dtb>
+		<module>m</module>
+		<build>b</build>
+		<install>i</install>
+	</arguments>
+
+	<boards>
+		<board>
+			<name>j6entry</name>
+			<filesystem>j6entry</filesystem>
+			<dtbs>
+				<dtb>dra71-evm.dtb</dtb>
+			</dtbs>
+		</board>
+
+		<board>
+			<name>571-idk</name>
+			<filesystem>am571-idk</filesystem>
+			<dtbs>
+				<dtb>am571x-idk.dtb</dtb>
+			</dtbs>
+		</board>
+
+		<board>
+			<name>437-gp</name>
+			<filesystem>am437</filesystem>
+			<dtbs>
+				<dtb>am437x-gp-evm.dtb</dtb>
+			</dtbs>
+		</board>
+
+		<board>
+			<name>dra7-gp</name>
+			<filesystem>dra7</filesystem>
+			<dtbs>
+				<dtb>dra7-evm.dtb</dtb>
+			</dtbs>
+		</board>
+	</boards>
+<configurations>
+
