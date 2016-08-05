@@ -105,9 +105,27 @@ for board in boards:
 	for dtb in dtbs:
 		dtb_list.append(dtb.string.strip())
 
+	power_on = []
+	power_off = []
+	if board.power is not None and board.power.on is not None and board.power.off is not None:
+		commands = board.power.on.findAll("command")
+		for command in commands:
+			power_on.append(command.string)
+
+		commands = board.power.off.findAll("command")
+		for command in commands:
+			power_off.append(command.string)
+
 	selected_boards[name] = {}
 	selected_boards[name]["filesystem"] = filesystem
 	selected_boards[name]["dtbs"] = dtb_list
+
+
+	if len(power_off) > 0 and len(power_on) > 0:
+		selected_boards[name]["power"] = {}
+		selected_boards[name]["power"]["on"] = power_on
+		selected_boards[name]["power"]["off"] = power_off
+
 
 machine_list = selected_boards.keys()
 
@@ -131,8 +149,8 @@ f.write(temp+'\n')
 f.write("\n")
 f.write("declare -A dtb\n")
 f.write("declare -A fs\n")
-f.write("declare -A pwr\n")
-f.write("declare -A pvr\n")
+f.write("declare -A pwrOn\n")
+f.write("declare -A pwrOff\n")
 f.write("\n")
 
 for machine in machine_list:
@@ -145,5 +163,11 @@ for machine in machine_list:
 	f.write(temp+"\n")
 
 	temp= "fs[%s]=%s" % (name,filesystem)
+	f.write(temp+"\n")
+
+	temp= "pwrOn[%s]=\"%s\"" % (name,";".join(selected_boards[machine]["power"]["on"]))
+	f.write(temp+"\n")
+
+	temp= "pwrOff[%s]=\"%s\"" % (name,";".join(selected_boards[machine]["power"]["off"]))
 	f.write(temp+"\n")
 	f.write("\n")
