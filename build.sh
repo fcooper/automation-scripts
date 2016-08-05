@@ -9,6 +9,10 @@ declare -A fs
 declare -A pwr
 declare -A pvr
 
+dtb[335-ice]='am335x-icev2.dtb'
+fs[335-ice]=335-ice
+pwr[335-ice]=335-ice
+
 dtb[bbb]='am335x-boneblack.dtb am335x-bone.dtb'
 fs[bbb]=bbb
 pwr[bbb]=bbb
@@ -34,11 +38,14 @@ fs[335-gp]=am335x
 pwr[335-gp]=335-gp
 
 
-dtb[k2e]=k2e-evm.dtb
+dtb[37x-gp]=omap3-evm-37xx.dtb
+fs[37x-gp]=am37x
+
+dtb[k2e]='keystone-k2e-evm.dtb'
 fs[k2e]=k2e
 pwr[k2e]=k2e
 
-dtb[k2g]=k2g-evm.dtb
+dtb[k2g]='keystone-k2g-evm.dtb'
 fs[k2g]=k2g
 pwr[k2g]=k2g
 
@@ -54,6 +61,9 @@ pwr[x15]=x15
 dtb[572-gp]=am57xx-evm.dtb
 fs[572-gp]=am57x
 
+dtb[572-idk]=am572x-idk.dtb
+fs[572-idk]=am57x-idk
+pwr[572-idk]=am57-idk
 
 supported_machines=()
 function supported_machines() {

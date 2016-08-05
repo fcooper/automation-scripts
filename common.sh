@@ -1,6 +1,6 @@
 source /usr/local/bin/config
 
-valid_machines=(bbw bbb 335-gp 335-sk 437-gp 437-sk 37x-gp k2e k2g x15 dra7-gp dra72-gp k2hk x15 572-gp)
+valid_machines=(bbw bbb 335-gp 335-sk 437-gp 437-sk 37x-gp k2e k2g x15 dra7-gp dra72-gp k2hk x15 572-gp 572-idk 335-ice)
 
 kernel_path=`git rev-parse --show-toplevel`
 
