@@ -6,6 +6,11 @@ declare -A rebootCommands
 
 source /usr/local/bin/common.sh
 
+switch_one_ip=192.168.1.251
+relay_one_ip=192.168.1.3
+pw_relay_ip=192.168.1.252
+
+
 # K2HK 
 relay[k2hk]=6
 onCommands[k2hk]="pw_relay_on"
