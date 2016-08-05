@@ -1,6 +1,6 @@
 <configurations>
-	<nfsdir>/home/a0273011local/nfs/</nfsdir>
-	<toolchaindir>/home/a0273011local/toolchain/gcc-linaro-4.9-2015.05-x86_64_arm-linux-gnueabihf/bin/</toolchaindir>
+	<nfsdir>/home/franklin/nfs/</nfsdir>
+	<toolchaindir>/home/franklin/toolchain/gcc-linaro-arm-linux-gnueabihf-4.9-2015.05_linux/bin</toolchaindir>
 	<toolchainprefix>arm-linux-gnueabihf-</toolchainprefix>
 	<makejobs>8</makejobs>
 
@@ -14,35 +14,59 @@
 
 	<boards>
 		<board>
-			<name>j6entry</name>
-			<filesystem>j6entry</filesystem>
+			<name>335-gp</name>
+			<filesystem>am335x</filesystem>
 			<dtbs>
-				<dtb>dra71-evm.dtb</dtb>
+				<dtb>am335x-evm.dtb</dtb>
 			</dtbs>
-		</board>
 
-		<board>
-			<name>571-idk</name>
-			<filesystem>am571-idk</filesystem>
-			<dtbs>
-				<dtb>am571x-idk.dtb</dtb>
-			</dtbs>
+			<power>
+				<on>
+					<command>mfi.sh 192.168.1.3 7 on</command>
+				</on>
+
+				<off>
+					<command>mfi.sh 192.168.1.3 7 off</command>
+				</off>
+
+			</power>
 		</board>
 
 		<board>
 			<name>437-gp</name>
-			<filesystem>am437</filesystem>
+			<filesystem>am437x</filesystem>
 			<dtbs>
 				<dtb>am437x-gp-evm.dtb</dtb>
 			</dtbs>
-		</board>
 
+			<power>
+				<on>
+					<command>mfi.sh 192.168.1.3 8 on</command>
+				</on>
+
+				<off>
+					<command>mfi.sh 192.168.1.3 8 off</command>
+				</off>
+
+			</power>
+		</board>
 		<board>
-			<name>dra7-gp</name>
-			<filesystem>dra7</filesystem>
+			<name>k2g</name>
+			<filesystem>k2g</filesystem>
 			<dtbs>
-				<dtb>dra7-evm.dtb</dtb>
+				<dtb>k2g-evm.dtb</dtb>
 			</dtbs>
+
+			<power>
+				<on>
+					<command>mfi.sh 192.168.1.3 2 on</command>
+				</on>
+
+				<off>
+					<command>mfi.sh 192.168.1.3 2 off</command>
+				</off>
+
+			</power>
 		</board>
 	</boards>
 <configurations>
